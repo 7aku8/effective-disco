@@ -9,7 +9,7 @@ image.src = '../assets/it.jpg'
 
 image.onload = () => {
   const particles = []
-  const particlesAmount = 6000
+  const particlesAmount = 8000
 
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
   const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -22,7 +22,7 @@ image.onload = () => {
       (red * red) * 0.299 +
       (green * green) * 0.587 +
       (blue * blue) * 0.114
-    ) / 150
+    ) / 110
   }
 
   for (let y = 0; y < canvas.height; y++) {
@@ -46,7 +46,7 @@ image.onload = () => {
       this.x = Math.random() * canvas.width
       this.y = 0
       this.speed = 0
-      this.velocity = Math.random() * 1.2
+      this.velocity = Math.random() * 2
       this.size = Math.random() * 1.5 + 2.1
 
       this.position1 = Math.floor(this.x)
@@ -65,10 +65,10 @@ image.onload = () => {
       }
 
       let movement = (3.5 + this.speed) + this.velocity
-      this.angle += this.speed
+      this.angle += this.speed / 20
 
       this.y += movement + 6 * Math.sin(this.angle)
-      this.x += movement + 1 * Math.sin(this.angle)
+      this.x += movement + 1.2 * Math.sin(this.angle)
 
       if (this.y >= canvas.height) {
         this.y = 0
