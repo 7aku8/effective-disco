@@ -22,7 +22,7 @@ image.onload = () => {
       (red * red) * 0.299 +
       (green * green) * 0.587 +
       (blue * blue) * 0.114
-    ) / 115
+    ) / 150
   }
 
   for (let y = 0; y < canvas.height; y++) {
@@ -39,7 +39,6 @@ image.onload = () => {
     }
 
     mappedImage.push(row)
-    row = []
   }
 
   class Particle {
@@ -47,34 +46,47 @@ image.onload = () => {
       this.x = Math.random() * canvas.width
       this.y = 0
       this.speed = 0
-      this.velocity = Math.random() * 2
-      this.size = Math.random() * 1.5 + 2.2
+      this.velocity = Math.random() * 1.2
+      this.size = Math.random() * 1.5 + 2.1
 
       this.position1 = Math.floor(this.x)
       this.position2 = Math.floor(this.y)
+
+      this.angle = 0
     }
 
     update() {
       this.position1 = Math.floor(this.y)
       this.position2 = Math.floor(this.x)
 
-      const [brightness] = mappedImage[this.position1][this.position2]
-      this.speed = brightness
+      if ((mappedImage[this.position1]) && (mappedImage[this.position1][this.position2])) {
+        const [brightness] = mappedImage[this.position1][this.position2]
+        this.speed = brightness
+      }
 
       let movement = (3.5 + this.speed) + this.velocity
+      this.angle += this.speed
 
-      this.y += movement
+      this.y += movement + 6 * Math.sin(this.angle)
+      this.x += movement + 1 * Math.sin(this.angle)
+
       if (this.y >= canvas.height) {
         this.y = 0
         this.x = Math.random() * canvas.width
       }
+      if (this.x >= canvas.width) {
+        this.x = 0
+        this.y = Math.random() * canvas.height
+      }
     }
 
     draw() {
-      const [_, color] = mappedImage[this.position1][this.position2]
+      if ((mappedImage[this.position1]) && (mappedImage[this.position1][this.position2])) {
+        const [_, color] = mappedImage[this.position1][this.position2]
+        ctx.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+      }
 
       ctx.beginPath()
-      ctx.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
       ctx.fill()
     }
