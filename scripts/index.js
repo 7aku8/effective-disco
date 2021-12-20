@@ -9,11 +9,13 @@ image.src = '../assets/it.jpg'
 
 image.onload = () => {
   const particles = []
-  const particlesAmount = 8000
+  const particlesAmount = 6000
 
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
   const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height)
   ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  const letters = ['Y', 'O', 'U', 'W', 'I', 'L', 'L', 'F', 'L', 'O', 'A', 'T', 'T', 'O', 'O'];
 
   const mappedImage = []
 
@@ -47,12 +49,15 @@ image.onload = () => {
       this.y = 0
       this.speed = 0
       this.velocity = Math.random() * 2
-      this.size = Math.random() * 1.5 + 2.1
+      this.size = Math.random() * 1.5 + 3.5
 
       this.position1 = Math.floor(this.x)
       this.position2 = Math.floor(this.y)
 
       this.angle = 0
+
+      this.random = Math.random()
+      this.letter = letters[Math.floor(Math.random() * letters.length)]
     }
 
     update() {
@@ -81,13 +86,19 @@ image.onload = () => {
     }
 
     draw() {
+      ctx.beginPath()
+
       if ((mappedImage[this.position1]) && (mappedImage[this.position1][this.position2])) {
         const [_, color] = mappedImage[this.position1][this.position2]
         ctx.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
       }
 
-      ctx.beginPath()
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+      if (this.random < .7) {
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+      } else {
+        ctx.fillText(this.letter, this.x, this.y)
+      }
+
       ctx.fill()
     }
   }
